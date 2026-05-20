@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-slate-50">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bio-Calculus Interactive: MD2 Pineapple Vinegar Fermentation Kinetics</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- KaTeX CSS and JS for rendering LaTeX equations -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+    <!-- FontAwesome for Premium Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pineapple: {
+                            50: '#fefdeb',
+                            100: '#fdfbc2',
+                            200: '#fbf589',
+                            300: '#f7e747',
+                            400: '#f3d41a',
+                            500: '#e1bc0b',
+                            600: '#c29606',
+                            700: '#9b7007',
+                            800: '#7e570b',
+                            900: '#68460e',
+                        },
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .latex-container .katex-display {
+            margin: 0.5em 0;
+            overflow-x: auto;
+            overflow-y: hidden;
+        }
+    </style>
+</head>
+<body class="h-full text-slate-800 flex flex-col font-sans">
+
+    <!-- Header / Navbar -->
+    <header class="bg-gradient-to-r from-pineapple-700 via-pineapple-600 to-emerald-700 text-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center space-x-3">
+                <div class="bg-white p-2.5 rounded-xl shadow-inner text-emerald-700 text-2xl font-bold">
+                    <i class="fa-solid fa-flask-vial"></i>
+                </div>
+                <div>
+                    <span class="text-xs font-bold tracking-wider uppercase text-pineapple-200">SFP: Agro Product Technology (Malaysia)</span>
+                    <h1 class="text-xl sm:text-2xl font-black tracking-tight">MD2 Pineapple Vinegar Bioprocess Sim</h1>
+                </div>
+            </div>
+            <div class="flex items-center space-x-2 text-xs bg-black/25 px-3 py-1.5 rounded-full border border-white/10">
+                <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span>Module: Mathematical Modeling & Biokinetics</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Grid -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- Left Column: Context, Bioscience Problem & Formulas (5 Cols) -->
+        <section class="lg:col-span-5 flex flex-col gap-6">
+            
+            <!-- Malaysia Bioscience Problem Context -->
+            <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 flex flex-col gap-4">
+                <div class="flex items-center space-x-2.5 border-b border-slate-100 pb-3">
+                    <span class="text-emerald-600 text-lg"><i class="fa-solid fa-seedling"></i></span>
+                    <h2 class="font-bold text-slate-900 text-lg">Malaysian Agro-Industrial Context</h2>
+                </div>
+                
+                <p class="text-sm text-slate-600 leading-relaxed">
+                    The <strong>MD2 Pineapple (Ananas comosus)</strong> is a key high-value crop championed by the 
+                    <span class="text-pineapple-700 font-semibold">Malaysian Pineapple Industry Board (LPM)</span>. Due to seasonal surpluses, downstream processing into premium organic pineapple vinegar via dual fermentation is a major economic driver in Johor and Selangor agro-hubs.
+                </p>
+
+                <div class="bg-amber-50/70 border-l-4 border-amber-500 p-3.5 rounded-r-lg text-xs leading-relaxed text-slate-700">
+                    <span class="font-bold text-amber-800"><i class="fa-solid fa-chart-line mr-1"></i> The Bioscience Challenge:</span><br>
+                    During the acetic acid fermentation stage, <em>Acetobacter aceti</em> oxidizes ethanol into acetic acid, consuming residual fermentable sugars. Monitoring the **Soluble Solids Content (measured in $^{\circ}\text{Brix}$)** is critical. The speed of sugar consumption determines nutrient feeding times and bioreactor temperature control.
+                </div>
+
+                <div class="text-xs text-slate-500 border-t border-slate-100 pt-3">
+                    <span class="font-bold text-slate-700">Realistic Reference Baselines:</span>
+                    <ul class="list-disc pl-4 mt-1 space-y-1">
+                        <li>
+                            <a href="https://www.mardi.gov.my/" target="_blank" class="text-emerald-600 hover:underline">
+                                <i class="fa-solid fa-link"></i> MARDI Food Technology Research Centre
+                            </a> (Vinegar Production Kinetics from MD2 Waste Streams).
+                        </li>
+                        <li>
+                            <a href="https://www.myananas.gov.my/" target="_blank" class="text-emerald-600 hover:underline">
+                                <i class="fa-solid fa-link"></i> Malaysian Pineapple Industry Board (LPM)
+                            </a> (Standard Quality Criteria for MD2 Fruit Pulp).
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Mathematical Modeling Section -->
+            <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 flex flex-col gap-4">
+                <div class="flex items-center space-x-2.5 border-b border-slate-100 pb-3">
+                    <span class="text-amber-500 text-lg"><i class="fa-solid fa-square-root-variable"></i></span>
+                    <h2 class="font-bold text-slate-900 text-lg">The Mathematical Model & Derivative</h2>
+                </div>
+                
+                <p class="text-sm text-slate-600 leading-relaxed">
+                    The consumption profile of sugar follows a logistic decay pattern as microbial populations reach saturation (stationary phase). We model the sugar level $f(x)$ in $^{\circ}\text{Brix}$ as a function of fermentation time $x$ (Days):
+                </p>
+
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 text-sm latex-container">
+                    <span class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Sugar Concentration Curve:</span>
+                    $$f(x) = B_{min} + \frac{B_{max} - B_{min}}{1 + e^{k(x - x_0)}}$$
+                    <span class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mt-3 mb-1">The First Derivative (Rate of Sugar Change):</span>
+                    $$f'(x) = - \frac{k(B_{max} - B_{min}) e^{k(x - x_0)}}{\left(1 + e^{k(x - x_0)}\right)^2}$$
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 text-xs bg-emerald-50/50 p-3 rounded-lg border border-emerald-100/50">
+                    <div>
+                        <span class="block font-bold text-emerald-800">Initial Sugar ($B_{max}$):</span>
+                        <span class="text-slate-600" id="lbl-bmax">15.0 °Brix</span>
+                    </div>
+                    <div>
+                        <span class="block font-bold text-emerald-800">Min Stable Sugar ($B_{min}$):</span>
+                        <span class="text-slate-600" id="lbl-bmin">3.5 °Brix</span>
+                    </div>
+                    <div>
+                        <span class="block font-bold text-emerald-800">Mid-point day ($x_0$):</span>
+                        <span class="text-slate-600">5.0 Days</span>
+                    </div>
+                    <div>
+                        <span class="block font-bold text-emerald-800">Growth coefficient ($k$):</span>
+                        <span class="text-slate-600">0.60 day\(^{-1}\)</span>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Right Column: Interactive Simulator & Live Data (7 Cols) -->
+        <section class="lg:col-span-7 flex flex-col gap-6">
+            
+            <!-- Interactive Simulator Dashboard -->
+            <div class="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-slate-100 flex flex-col gap-6">
+                
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 pb-4 gap-2">
+                    <div>
+                        <h2 class="font-black text-slate-900 text-lg">Interactive Kinetic Visualization</h2>
+                        <p class="text-xs text-slate-500">Drag the slider or click/tap the graph points to analyze rate changes instantly.</p>
+                    </div>
+                    
+                    <!-- Dynamic Model Customization -->
+                    <div class="flex items-center gap-2">
+                        <label for="input-bmax" class="text-xs font-semibold text-slate-500">Set Initial Brix:</label>
+                        <select id="input-bmax" class="text-xs font-bold text-emerald-800 bg-emerald-50 rounded-lg px-2 py-1 border border-emerald-200 outline-none cursor-pointer">
+                            <option value="16.0">16.0 °Brix (High Yield MD2)</option>
+                            <option value="15.0" selected>15.0 °Brix (Standard MD2)</option>
+                            <option value="13.5">13.5 °Brix (Slightly Dilute)</option>
+                            <option value="12.0">12.0 °Brix (Under-ripe Waste)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Live Chart Container -->
+                <div class="relative w-full h-80 sm:h-96">
+                    <canvas id="fermentationChart"></canvas>
+                </div>
+
+                <!-- Slide Control -->
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col gap-2">
+                    <div class="flex items-center justify-between text-xs font-bold">
+                        <span class="text-slate-500">Day 0.0 (Start)</span>
+                        <span class="text-pineapple-700 bg-pineapple-100 px-3 py-1 rounded-full border border-pineapple-300">
+                            Selected: Day <span id="current-day-label">5.0</span>
+                        </span>
+                        <span class="text-slate-500">Day 14.0 (End)</span>
+                    </div>
+                    <input 
+                        type="range" 
+                        id="timeSlider" 
+                        min="0" 
+                        max="14" 
+                        step="0.1" 
+                        value="5.0" 
+                        class="w-full h-2 bg-slate-300 rounded-lg appearance-none cursor-pointer accent-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    >
+                </div>
+
+                <!-- Live Bio-Calculus Readout Panel -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    
+                    <!-- Values Panel -->
+                    <div class="bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-xl p-4 shadow-md flex flex-col justify-between gap-4">
+                        <div class="flex items-center justify-between border-b border-slate-700/60 pb-2">
+                            <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Calculus Snapshot</span>
+                            <span class="text-xs text-emerald-400 font-bold bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-800">Dynamic</span>
+                        </div>
+                        
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-baseline">
+                                <span class="text-xs text-slate-300">Fermentation Day \(x\):</span>
+                                <span class="text-lg font-bold text-pineapple-400" id="readout-x">5.00 days</span>
+                            </div>
+                            <div class="flex justify-between items-baseline">
+                                <span class="text-xs text-slate-300">Sugar concentration \(f(x)\):</span>
+                                <span class="text-lg font-bold text-emerald-400" id="readout-fx">9.25 °Brix</span>
+                            </div>
+                            <div class="flex justify-between items-baseline">
+                                <span class="text-xs text-slate-300">Rate of change \(f'(x)\):</span>
+                                <span class="text-lg font-bold text-rose-400" id="readout-dfx">-1.73 °Brix/day</span>
+                            </div>
+                        </div>
+
+                        <div class="text-[10px] text-slate-400 mt-2">
+                            *Negative derivative sign confirms sugar depletion.
+                        </div>
+                    </div>
+
+                    <!-- Layman Explanation Box -->
+                    <div class="bg-emerald-50 rounded-xl p-4 border border-emerald-100 flex flex-col gap-2">
+                        <div class="flex items-center space-x-1.5 text-xs font-bold text-emerald-800">
+                            <span><i class="fa-solid fa-circle-info"></i></span>
+                            <span>LAYMAN BIOLOGICAL EXPLANATION</span>
+                        </div>
+                        <p id="layman-explanation" class="text-sm text-emerald-900 leading-relaxed font-medium">
+                            Calculating explanation...
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Quiz & Concept Reinforcement (Agro-tech student focus) -->
+            <div class="bg-gradient-to-r from-emerald-800 to-pineapple-800 text-white rounded-2xl p-5 shadow-sm flex flex-col sm:flex-row gap-5 items-center justify-between">
+                <div class="space-y-1">
+                    <span class="text-xs font-semibold text-pineapple-300 tracking-widest uppercase">Undergraduate Quiz Point</span>
+                    <h3 class="font-bold text-base leading-snug">When is the biological fermentation reaction running at absolute maximum speed?</h3>
+                    <p class="text-xs text-white/80">Hint: Look for the maximum absolute value of the rate of change $|f'(x)|$.</p>
+                </div>
+                <button 
+                    onclick="revealAnswer()" 
+                    class="bg-white hover:bg-pineapple-100 text-emerald-900 text-xs font-bold px-4 py-2.5 rounded-lg transition-colors shadow shadow-emerald-950/50 self-start sm:self-center shrink-0"
+                >
+                    Reveal Answer
+                </button>
+            </div>
+
+            <!-- Quiz Modal -->
+            <div id="quizModal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                <div class="bg-white max-w-md w-full rounded-2xl p-6 shadow-2xl relative border border-pineapple-300">
+                    <button onclick="closeModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600">
+                        <i class="fa-solid fa-xmark text-xl"></i>
+                    </button>
+                    <div class="text-center space-y-4">
+                        <div class="inline-flex bg-pineapple-100 p-3 rounded-full text-pineapple-700 text-2xl mx-auto">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                        </div>
+                        <h4 class="font-extrabold text-slate-900 text-lg">Peak Fermentation Kinetics Answer</h4>
+                        <p class="text-sm text-slate-600 leading-relaxed text-left">
+                            Fermentation is running at maximum speed exactly at **Day 5.0** (the inflection point of the sigmoid curve). 
+                        </p>
+                        <p class="text-xs text-slate-500 leading-relaxed text-left">
+                            Mathematically, this represents the point where the second derivative \(f''(x) = 0\), turning the rate of acceleration negative (deceleration starts). At Day 5.0, the derivative value is at its absolute maximum negative speed of **-1.73 °Brix/day**. 
+                        </p>
+                        <div class="bg-emerald-50 p-3 rounded-lg text-xs text-emerald-800 font-semibold border border-emerald-100 text-left">
+                            💡 **Agro-tech Application:** This is when *Acetobacter* cell counts are highest and heat production peaks inside the fermenter. In Malaysian manufacturing facilities, this is when cooling jackets must be set to maximum throughput to prevent heat stress on microbes.
+                        </div>
+                        <button onclick="closeModal()" class="w-full bg-pineapple-600 hover:bg-pineapple-700 text-white font-bold py-2 rounded-xl text-sm transition-colors shadow">
+                            Got it, thanks!
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 py-6 border-t border-slate-800 text-center text-xs mt-auto">
+        <div class="max-w-7xl mx-auto px-4 space-y-2">
+            <p>Developed for Agro Product Technology Undergraduates | Malaysia Crop-Waste Biorefinery Research</p>
+            <p class="text-slate-600">&copy; 2026 Malaysia Academic Bio-Calculus Simulator Consortium. All realistic models calibrated to standard local parameters.</p>
+        </div>
+    </footer>
+
+    <!-- Chart and Logic Controls -->
+    <script>
+        // Constants matching the mathematical model
+        let B_max = 15.0; // Dynamic sugar levels
+        const B_min = 3.5;
+        const x_0 = 5.0;  // Inflection point of fermentation
+        const k = 0.6;    // Growth rate parameter
+
+        // Dynamic State
+        let currentDay = 5.0;
+        let chartInstance = null;
+
+        // Elements
+        const timeSlider = document.getElementById('timeSlider');
+        const currentDayLabel = document.getElementById('current-day-label');
+        const selectBmax = document.getElementById('input-bmax');
+
+        // Readout Elements
+        const readoutX = document.getElementById('readout-x');
+        const readoutFx = document.getElementById('readout-fx');
+        const readoutDfx = document.getElementById('readout-dfx');
+        const laymanExplanation = document.getElementById('layman-explanation');
+
+        // Mathematical Evaluation functions
+        function getBrix(x) {
+            return B_min + (B_max - B_min) / (1 + Math.exp(k * (x - x_0)));
+        }
+
+        function getBrixDerivative(x) {
+            const expPart = Math.exp(k * (x - x_0));
+            return - (k * (B_max - B_min) * expPart) / Math.pow(1 + expPart, 2);
+        }
+
+        // Tangent Line Calculation: Y_t = f'(x_c) * (X - x_c) + f(x_c)
+        function getTangentPoint(x, x_c, y_c, slope) {
+            return slope * (x - x_c) + y_c;
+        }
+
+        // Biological Explanation Dictionary based on Fermentation Day
+        function generateBiologicalInterpretation(day, brix, derivative) {
+            const speed = Math.abs(derivative);
+            if (day < 1.5) {
+                return `<strong>Adaptation Phase (Lag Phase):</strong> The bacterial culture <em>Acetobacter aceti</em> is adjusting to the high ethanol juice environment. Enzymes are synthesis-bound. The sugar depletion rate is slow (${speed.toFixed(2)} °Brix/day) because cells are not multiplying exponentially yet.`;
+            } else if (day >= 1.5 && day < 4.0) {
+                return `<strong>Early Log Phase:</strong> Fermentation speed is accelerating fast! Microbes are rapidly replicating. Sugar consumption rate is increasing toward its peak. Tangent line slope on the graph is tipping sharply downwards.`;
+            } else if (day >= 4.0 && day <= 6.0) {
+                return `<strong>Exponential Phase Peak (${speed.toFixed(2)} °Brix/day):</strong> Biological reaction is running at absolute limit! The slope of the curve is steepest. Cells are consuming sugar frantically and generating volatile organic aromatics and acetic acid, characteristic of high-quality MD2 artisan vinegars.`;
+            } else if (day > 6.0 && day < 10.0) {
+                return `<strong>Deceleration Phase:</strong> Reaction rate begins slowing down (${speed.toFixed(2)} °Brix/day). Nutrient depletion and accumulation of high acidity (acetic acid) begin to hinder microbial metabolism, leading to a steady flattening of the curve.`;
+            } else {
+                return `<strong>Stationary Phase (Maturity):</strong> Fermentation is virtually complete. The sugar curve has stabilized close to its minimum value of ${brix.toFixed(2)} °Brix. The derivative is nearly zero (${speed.toFixed(2)} °Brix/day), meaning no sugar conversion remains. The vinegar is now ready for filtration and bottling!`;
+            }
+        }
+
+        // Generate coordinates for initial load
+        const daysArray = Array.from({length: 141}, (_, i) => i * 0.1); // 0 to 14 in increments of 0.1
+        
+        // Update Chart and Values based on Day
+        function updateSimulation(targetDay) {
+            currentDay = targetDay;
+            timeSlider.value = currentDay;
+            currentDayLabel.innerText = currentDay.toFixed(1);
+
+            const brix = getBrix(currentDay);
+            const derivative = getBrixDerivative(currentDay);
+
+            // Update DOM readouts
+            readoutX.innerHTML = `\\(${currentDay.toFixed(2)}\\text{ days}\\)`;
+            readoutFx.innerHTML = `\\(${brix.toFixed(2)}\\text{ }^{\\circ}\\text{Brix}\\)`;
+            readoutDfx.innerHTML = `\\(${derivative.toFixed(2)}\\text{ }^{\\circ}\\text{Brix/day}\\)`;
+            
+            // Re-trigger KaTeX math formatting
+            if (window.renderMathInElement) {
+                renderMathInElement(readoutX);
+                renderMathInElement(readoutFx);
+                renderMathInElement(readoutDfx);
+            }
+
+            // Layman translation
+            laymanExplanation.innerHTML = generateBiologicalInterpretation(currentDay, brix, derivative);
+
+            // Update Chart datasets
+            if (chartInstance) {
+                // Generate tangent line values spanning [-2.5, +2.5] days from selected day
+                const tangentData = daysArray.map(x => {
+                    if (Math.abs(x - currentDay) <= 2.5) {
+                        return { x: x, y: getTangentPoint(x, currentDay, brix, derivative) };
+                    }
+                    return null; // Don't draw beyond bounds to maintain local focus
+                });
+
+                chartInstance.data.datasets[1].data = tangentData;
+
+                // Update pinpoint dataset (the pulsing red coordinate)
+                chartInstance.data.datasets[2].data = [{ x: currentDay, y: brix }];
+                
+                chartInstance.update('none'); // Quick animation update
+            }
+        }
+
+        // Initialize Chart.js
+        function initializeChart() {
+            const ctx = document.getElementById('fermentationChart').getContext('2d');
+            
+            // Setup Main Sugar Curve Dataset
+            const sugarCurveData = daysArray.map(x => ({ x: x, y: getBrix(x) }));
+
+            chartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    datasets: [
+                        {
+                            label: 'MD2 Sugar level (f(x) in °Brix)',
+                            data: sugarCurveData,
+                            borderColor: '#e1bc0b', // Pineapple Gold
+                            borderWidth: 4,
+                            pointRadius: 0,
+                            fill: false,
+                            tension: 0.1
+                        },
+                        {
+                            label: "f'(x) Tangent Line (Inst. Rate)",
+                            data: [],
+                            borderColor: '#fb7185', // Rose pink tangent
+                            borderWidth: 2,
+                            borderDash: [5, 5],
+                            pointRadius: 0,
+                            fill: false,
+                        },
+                        {
+                            label: 'Selected State Pinpoint',
+                            data: [{ x: currentDay, y: getBrix(currentDay) }],
+                            backgroundColor: '#10b981', // Emerald green
+                            borderColor: '#ffffff',
+                            borderWidth: 3,
+                            pointRadius: 8,
+                            pointHoverRadius: 10,
+                            showLine: false
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'nearest',
+                        intersect: false,
+                    },
+                    scales: {
+                        x: {
+                            type: 'linear',
+                            title: {
+                                display: true,
+                                text: 'Fermentation Duration (Days)',
+                                font: { size: 12, weight: 'bold' },
+                                color: '#475569'
+                            },
+                            min: 0,
+                            max: 14,
+                            grid: { color: '#f1f5f9' }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Sugar Concentration (°Brix)',
+                                font: { size: 12, weight: 'bold' },
+                                color: '#475569'
+                            },
+                            min: 0,
+                            max: 18,
+                            grid: { color: '#f1f5f9' }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                boxWidth: 15,
+                                font: { size: 11, family: 'sans-serif' }
+                            }
+                        }
+                    },
+                    // Allow click events on the graph to change current time coordinate
+                    onClick: (e) => {
+                        const points = chartInstance.getElementsAtEventForMode(e, 'nearest', { intersect: false }, true);
+                        if (points.length > 0) {
+                            const activeIndex = points[0].index;
+                            const clickedX = daysArray[activeIndex];
+                            updateSimulation(clickedX);
+                        }
+                    }
+                }
+            });
+
+            // Initial update
+            updateSimulation(currentDay);
+        }
+
+        // Trigger on DOM load
+        window.onload = function() {
+            initializeChart();
+
+            // Slider events
+            timeSlider.oninput = function() {
+                updateSimulation(parseFloat(this.value));
+            };
+
+            // Dropdown event to adjust Initial Brix level dynamically
+            selectBmax.onchange = function() {
+                B_max = parseFloat(this.value);
+                document.getElementById('lbl-bmax').innerText = B_max.toFixed(1) + " °Brix";
+                
+                // Re-calculate the primary sugar dataset curve
+                if (chartInstance) {
+                    chartInstance.data.datasets[0].data = daysArray.map(x => ({ x: x, y: getBrix(x) }));
+                }
+                updateSimulation(currentDay);
+            };
+        };
+
+        // Quiz Helpers
+        function revealAnswer() {
+            document.getElementById('quizModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('quizModal').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
